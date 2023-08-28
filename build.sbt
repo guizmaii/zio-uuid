@@ -40,6 +40,8 @@ inThisBuild(
   )
 )
 
+addCommandAlias("updateReadme", "docs/generateReadme")
+
 lazy val root =
   project
     .in(file("."))
@@ -48,7 +50,10 @@ lazy val root =
       publish / skip     := true,
       crossScalaVersions := Nil,// https://www.scala-sbt.org/1.x/docs/Cross-Build.html#Cross+building+a+project+statefully
     )
-    .aggregate(`zio-uuid`)
+    .aggregate(
+      `zio-uuid`,
+      `zio-uuid-json`,
+    )
 
 lazy val `zio-uuid` =
   project
@@ -64,6 +69,18 @@ lazy val `zio-uuid` =
         "com.github.poslegm" %% "munit-zio"   % "0.1.1"          % Test,
       )
     )
+
+lazy val `zio-uuid-json` =
+  project
+    .in(file("zio-uuid-json"))
+    .settings(stdSettings(Some("zio-uuid-json")))
+    .settings(addOptionsOn("2.13")("-Xsource:3"))
+    .settings(
+      libraryDependencies ++= Seq(
+        "dev.zio"           %%% "zio-json"         % "0.6.1",
+      )
+    )
+    .dependsOn(`zio-uuid`)
 
 lazy val docs =
   project
