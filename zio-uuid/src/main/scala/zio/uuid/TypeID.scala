@@ -16,6 +16,7 @@
 
 package zio.uuid
 
+import zio.json.JsonCodec
 import zio.prelude.{Debug, Equal, Validation}
 import zio.uuid.internals.UUIDBase32
 
@@ -37,6 +38,9 @@ object TypeID {
   implicit val typeIdDebug: Debug[TypeID]       = Debug.make(_.toString)
   implicit val typeIdOrdering: Ordering[TypeID] = Ordering.by(_.value)
   implicit val typeIdEqual: Equal[TypeID]       = Equal.default
+
+  implicit val typeIDCodec: JsonCodec[TypeID] =
+    JsonCodec.string.transformOrFail[TypeID](TypeID.decode(_).toEitherWith(_.mkString(", ")), _.value)
 
   /**
    * Build a TypeID based on the supplied prefix and uuid.

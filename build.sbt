@@ -51,8 +51,7 @@ lazy val root =
       crossScalaVersions := Nil,// https://www.scala-sbt.org/1.x/docs/Cross-Build.html#Cross+building+a+project+statefully
     )
     .aggregate(
-      `zio-uuid`,
-      `zio-uuid-json`,
+      `zio-uuid`
     )
 
 lazy val `zio-uuid` =
@@ -64,23 +63,12 @@ lazy val `zio-uuid` =
       libraryDependencies ++= Seq(
         "dev.zio"           %%% "zio"         % zioVersion.value,
         "dev.zio"            %% "zio-prelude" % "1.0.0-RC20",
+        "dev.zio"           %%% "zio-json"    % "0.6.1"          % Optional,
         "dev.zio"           %%% "zio-test"    % zioVersion.value % Test,
         "org.scalameta"     %%% "munit"       % "0.7.29"         % Test,
         "com.github.poslegm" %% "munit-zio"   % "0.1.1"          % Test,
       )
     )
-
-lazy val `zio-uuid-json` =
-  project
-    .in(file("zio-uuid-json"))
-    .settings(stdSettings(Some("zio-uuid-json")))
-    .settings(addOptionsOn("2.13")("-Xsource:3"))
-    .settings(
-      libraryDependencies ++= Seq(
-        "dev.zio"           %%% "zio-json"         % "0.6.1",
-      )
-    )
-    .dependsOn(`zio-uuid`)
 
 lazy val docs =
   project
