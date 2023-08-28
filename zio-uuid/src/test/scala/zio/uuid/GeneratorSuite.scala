@@ -51,8 +51,8 @@ class GeneratorSuite extends ZSuite {
   testZ("TypeID should generate TypeIds") {
     for {
       typeids <- ZIO.collectAll(List.tabulate(n)(_ => TypeIDGenerator.generate("prefix"))).provideLayer(TypeIDGenerator.live)
-      _ <- ZIO.succeed(assert(typeids.distinct.size == typeids.size))
-      _ <- ZIO.succeed(assert(isSeqSorted(typeids)))
+      _       <- ZIO.succeed(assert(typeids.distinct.size == typeids.size))
+      _       <- ZIO.succeed(assert(isSeqSorted(typeids)))
     } yield ()
   }
 

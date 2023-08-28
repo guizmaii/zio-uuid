@@ -104,13 +104,13 @@ object TypeID {
     case object InvalidPrefix extends BuildError {
       val message = "prefix is not at most 63 characters in all lowercase ASCII [a-z]"
     }
-    case object InvalidUUID extends BuildError {
+    case object InvalidUUID   extends BuildError {
       val message = "uuid is not a UUIDv7"
     }
 
     implicit val buildErrorShow: Debug[BuildError] = Debug.make {
       case InvalidPrefix => s"InvalidPrefix: ${InvalidPrefix.message}"
-      case InvalidUUID => s"InvalidUUID: ${InvalidUUID.message}"
+      case InvalidUUID   => s"InvalidUUID: ${InvalidUUID.message}"
     }
   }
 
@@ -118,16 +118,16 @@ object TypeID {
     def message: String
   }
   object DecodeError {
-    case object NotParseableTypeID extends DecodeError {
+    case object NotParseableTypeID                  extends DecodeError {
       override val message = "Could not parse the supplied string as a TypeID"
     }
-    case object BadSeparator extends DecodeError {
+    case object BadSeparator                        extends DecodeError {
       override val message = "An empty prefix should not have a separator"
     }
-    case object MissingSeparator extends DecodeError {
+    case object MissingSeparator                    extends DecodeError {
       override val message = "A separator was not found"
     }
-    case object NotUUIDV7 extends DecodeError {
+    case object NotUUIDV7                           extends DecodeError {
       override val message = "The decoded UUID is not a mandatory V7"
     }
     final case class InvalidTypeID(message: String) extends DecodeError
