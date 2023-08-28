@@ -7,7 +7,7 @@ enablePlugins(
 
 inThisBuild(
   List(
-    name                     := "ZIO UUID",
+    name                     := "zio-uuid",
     zioVersion               := "2.0.16",
     scala212                 := "2.12.18",
     scala213                 := "2.13.11",
