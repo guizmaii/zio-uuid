@@ -24,7 +24,8 @@ Implementation based on this [UUID RFC Draft](https://datatracker.ietf.org/doc/h
 In addition to UUID, there is also support for [TypeIDs](https://github.com/jetpack-io/typeid). TypeIDs are a modern,
 type-safe extension of UUIDv7
 
-_ZIO implementation note:_ Note, that we don't provide a UUIDv4 implementation in this lib. ZIO is already providing one
+_ZIO implementation note:_    
+Note, that we don't provide a UUIDv4 implementation in this lib. ZIO is already providing one
 with `ZIO.randomWith(_.nextUUID)`
 
 ## Installation

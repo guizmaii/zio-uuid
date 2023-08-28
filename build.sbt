@@ -77,7 +77,7 @@ lazy val docs =
       projectStage                               := ProjectStage.ProductionReady,
       ScalaUnidoc / unidoc / unidocProjectFilter := inProjects(`zio-uuid`),
       readmeCredits                              :=
-        "This library is a fork of [uuid4cats-effect](https://github.com/ant8e/uuid4cats-effect) made by Antoine Comte (https://github.com/ant8e)",
+        "This library is a fork of the [uuid4cats-effect](https://github.com/ant8e/uuid4cats-effect) library made by Antoine Comte (https://github.com/ant8e)",
       readmeLicense += s"\n\nCopyright 2023-${java.time.Year.now()} Jules Ivanic and the zio-uuid contributors.",
     )
     .enablePlugins(WebsitePlugin)
