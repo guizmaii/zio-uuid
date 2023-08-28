@@ -2,7 +2,6 @@ package zio.uuid.internals
 
 import zio.{Ref, Semaphore, UIO, ZIO}
 
-import java.util.UUID
 import java.util.concurrent.TimeUnit
 
 private[zio] final case class GeneratorState(lastUsedEpochMillis: Long, sequence: Long)
@@ -11,13 +10,13 @@ private[zio] object GeneratorState {
 }
 
 private[zio] object UUIDGeneratorBuilder {
-  type UUIDBuilder = (Long, Long, Long) => UUID
+  type UUIDBuilder[UUIDvX] = (Long, Long, Long) => UUIDvX
 
-  def generate(
+  def generate[UUIDvX](
     state: Ref[GeneratorState],
     mutex: Semaphore,
-    builder: UUIDBuilder,
-  ): UIO[UUID] =
+    builder: UUIDBuilder[UUIDvX],
+  ): UIO[UUIDvX] =
     for {
       random <- ZIO.random.flatMap(_.nextLong)
       uuid   <- mutex.withPermit {
@@ -43,7 +42,7 @@ private[zio] object UUIDGeneratorBuilder {
     } yield uuid
 
   // noinspection YieldingZIOEffectInspection
-  def buildGenerator(builder: UUIDBuilder): UIO[UIO[UUID]] =
+  def buildGenerator[UUIDvX](builder: UUIDBuilder[UUIDvX]): UIO[UIO[UUIDvX]] =
     for {
       state <- Ref.make(GeneratorState.initial)
       mutex <- Semaphore.make(1)

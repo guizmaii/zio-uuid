@@ -21,11 +21,11 @@ object TypeIDGenerator {
    *  Return a UUID V7 based TypeID generator
    */
   val live: ULayer[TypeIDGenerator] =
-    UUIDGenerator.uuidV7 >>> ZLayer.fromZIO {
+    UUIDGenerator.live >>> ZLayer.fromZIO {
       ZIO.serviceWith[UUIDGenerator](uuidGenerator =>
         new TypeIDGenerator {
           override def typeid(prefix: String): IO[IllegalArgumentException, TypeID] =
-            uuidGenerator.uuid.flatMap { uuid =>
+            uuidGenerator.uuidV7.flatMap { uuid =>
               TypeID
                 .build(prefix, uuid)
                 .mapError(errors => new IllegalArgumentException(errors.render))

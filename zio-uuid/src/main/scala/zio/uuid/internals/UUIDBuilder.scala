@@ -1,11 +1,13 @@
 package zio.uuid.internals
 
+import zio.uuid.types.{UUIDv1, UUIDv6, UUIDv7}
+
 import java.util.UUID
 
 private[zio] object UUIDBuilder {
   val Variant = 0x2L
 
-  def buildUUIDv1(epochMillis: Long, sequence: Long, random: Long): UUID = {
+  def buildUUIDv1(epochMillis: Long, sequence: Long, random: Long): UUIDv1 = {
     val Version            = 0x1L
     val gregorianTimestamp = toUUIDTimestamp(epochMillis)
     val time_high          =
@@ -19,10 +21,10 @@ private[zio] object UUIDBuilder {
     val clock_seq = sequence & 0x3fff // 14 bits
     val msb       = (time_low << 32) | time__mid << 16 | (Version << 12) | time_high
     val lsb       = (Variant << 62) | clock_seq << 48 | node
-    new UUID(msb, lsb)
+    UUIDv1.unsafe(new UUID(msb, lsb))
   }
 
-  def buildUUIDv6(epochMillis: Long, sequence: Long, random: Long): UUID = {
+  def buildUUIDv6(epochMillis: Long, sequence: Long, random: Long): UUIDv6 = {
     val Version            = 0x6L
     val gregorianTimestamp = toUUIDTimestamp(epochMillis)
     val time_high_and_mid  =
@@ -33,16 +35,16 @@ private[zio] object UUIDBuilder {
     val clock_seq = sequence & 0x3fff     // 14 bits
     val msb       = (time_high_and_mid << 16) | (Version << 12) | time_low
     val lsb       = (Variant << 62) | clock_seq << 48 | node
-    new UUID(msb, lsb)
+    UUIDv6.unsafe(new UUID(msb, lsb))
   }
 
-  def buildUUIDV7(epochMillis: Long, sequence: Long, random: Long): UUID = {
+  def buildUUIDv7(epochMillis: Long, sequence: Long, random: Long): UUIDv7 = {
     val Version = 0x7L
     val rand_a  = sequence & 0xfffL   // 12 bits
     val rand_b  = (random << 2) >>> 2 // we need only 62 bits of randomness
     val msb     = (epochMillis << 16) | (Version << 12) | rand_a
     val lsb     = (Variant << 62) | rand_b
-    new UUID(msb, lsb)
+    UUIDv7.unsafe(new UUID(msb, lsb))
   }
 
   /**

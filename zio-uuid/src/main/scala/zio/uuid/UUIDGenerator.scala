@@ -18,32 +18,29 @@ package zio.uuid
 
 import zio.uuid.internals.UUIDBuilder
 import zio.uuid.internals.UUIDGeneratorBuilder.buildGenerator
+import zio.uuid.types.{UUIDv1, UUIDv6, UUIDv7}
 import zio.{UIO, ULayer, URIO, ZIO, ZLayer}
 
-import java.util.UUID
-
 trait UUIDGenerator {
-  def uuid: UIO[UUID]
+  def uuidV1: UIO[UUIDv1]
+  def uuidV6: UIO[UUIDv6]
+  def uuidV7: UIO[UUIDv7]
 }
 
-final class UUIDv1Generator(private val generate: UIO[UUID]) extends UUIDGenerator {
-  override def uuid: UIO[UUID] = generate
-}
-
-final class UUIDv6Generator(private val generate: UIO[UUID]) extends UUIDGenerator {
-  override def uuid: UIO[UUID] = generate
-}
-
-final class UUIDv7Generator(private val generate: UIO[UUID]) extends UUIDGenerator {
-  override def uuid: UIO[UUID] = generate
+final class UUIDGeneratorLive(private val v1: UIO[UUIDv1], private val v6: UIO[UUIDv6], private val v7: UIO[UUIDv7]) extends UUIDGenerator {
+  override def uuidV1: UIO[UUIDv1] = v1
+  override def uuidV6: UIO[UUIDv6] = v6
+  override def uuidV7: UIO[UUIDv7] = v7
 }
 
 object UUIDGenerator {
 
   /**
-   * Accessor function
+   * Accessor functions
    */
-  val uuid: URIO[UUIDGenerator, UUID] = ZIO.serviceWithZIO(_.uuid)
+  val uuidV1: URIO[UUIDGenerator, UUIDv1] = ZIO.serviceWithZIO(_.uuidV1)
+  val uuidV6: URIO[UUIDGenerator, UUIDv6] = ZIO.serviceWithZIO(_.uuidV6)
+  val uuidV7: URIO[UUIDGenerator, UUIDv7] = ZIO.serviceWithZIO(_.uuidV7)
 
   /**
    * return a UUIDv1 (gregorian timestamp based, non-sortable) generator with
@@ -52,28 +49,13 @@ object UUIDGenerator {
    *
    * This function uses a randomized MAC address.
    */
-  val uuidV1: ULayer[UUIDGenerator] =
+  val live: ULayer[UUIDGenerator] =
     ZLayer.fromZIO {
-      buildGenerator(UUIDBuilder.buildUUIDv1).map(new UUIDv1Generator(_))
+      for {
+        v1 <- buildGenerator(UUIDBuilder.buildUUIDv1)
+        v6 <- buildGenerator(UUIDBuilder.buildUUIDv6)
+        v7 <- buildGenerator(UUIDBuilder.buildUUIDv7)
+      } yield new UUIDGeneratorLive(v1, v6, v7)
     }
 
-  /**
-   * return a UUIDv6 (gregorian timestamp based, sortable) generator with
-   * guarantee about the uniqueness of the UUID, even within the same
-   * millisecond timestamp.
-   */
-  val uuidV6: ULayer[UUIDGenerator] =
-    ZLayer.fromZIO {
-      buildGenerator(UUIDBuilder.buildUUIDv6).map(new UUIDv6Generator(_))
-    }
-
-  /**
-   * return a UUIDv7 (unix epoch timestamp based, sortable) generator with
-   * guarantee about the uniqueness of the UUID, even within the same
-   * millisecond timestamp.
-   */
-  val uuidV7: ULayer[UUIDGenerator] =
-    ZLayer.fromZIO {
-      buildGenerator(UUIDBuilder.buildUUIDV7).map(new UUIDv7Generator(_))
-    }
 }

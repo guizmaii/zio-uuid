@@ -17,7 +17,7 @@
 package zio.uuid
 
 import munit.ZSuite
-import zio.{URIO, ZIO}
+import zio.{UIO, ZIO}
 
 import java.util.UUID
 
@@ -26,23 +26,29 @@ class GeneratorSuite extends ZSuite {
   private val n = 10000
 
   testZ("UUIDv1 should generate UUIDs") {
+    val gen = UUIDGenerator.uuidV1.provideLayer(UUIDGenerator.live)
+
     for {
-      uuids <- genN(n).provideLayer(UUIDGenerator.uuidV1)
+      uuids <- genN(gen, n)
       _     <- assertAllUnique(uuids)
     } yield ()
   }
 
   testZ("UUIDv6 should generate UUIDs") {
+    val gen = UUIDGenerator.uuidV6.provideLayer(UUIDGenerator.live)
+
     for {
-      uuids <- genN(n).provideLayer(UUIDGenerator.uuidV6)
+      uuids <- genN(gen, n)
       _     <- assertAllUnique(uuids)
       _     <- assertSorted(uuids)
     } yield ()
   }
 
   testZ("UUIDv7 should generate UUIDs") {
+    val gen = UUIDGenerator.uuidV7.provideLayer(UUIDGenerator.live)
+
     for {
-      uuids <- genN(n).provideLayer(UUIDGenerator.uuidV7)
+      uuids <- genN(gen, n)
       _     <- assertAllUnique(uuids)
       _     <- assertSorted(uuids)
     } yield ()
@@ -63,8 +69,8 @@ class GeneratorSuite extends ZSuite {
       .interceptFailure[IllegalArgumentException]
   }
 
-  private def genN(n: Int): URIO[UUIDGenerator, List[UUID]] =
-    ZIO.collectAll(List.tabulate(n)(_ => UUIDGenerator.uuid))
+  private def genN[UUIDvX](gen: UIO[UUIDvX], n: Int): UIO[List[UUIDvX]] =
+    ZIO.collectAll(List.tabulate(n)(_ => gen))
 
   implicit class UUIDsOps(uuids: List[UUID]) {
     def allUniques: Boolean = uuids.distinct.size == uuids.size
