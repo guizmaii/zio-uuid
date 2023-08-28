@@ -54,7 +54,7 @@ lazy val `zio-uuid` =
   project
     .in(file("zio-uuid"))
     .settings(stdSettings(Some("zio-uuid")))
-    .settings(scalacOptions += "-Xsource:3")
+    .settings(addOptionsOn("2.13")("-Xsource:3"))
     .settings(
       libraryDependencies ++= Seq(
         "dev.zio"           %%% "zio"         % zioVersion.value,
