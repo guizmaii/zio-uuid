@@ -4,7 +4,7 @@
 
 # zio-uuid
 
-[ZIO UUID](https://github.com/guizmaii/zio-uuid) is a "ziofied" fork
+[zio-uuid](https://github.com/guizmaii/zio-uuid) is a "ZIOfied" fork
 of [uuid4cats-effect](https://github.com/ant8e/uuid4cats-effect) by [Antoine Comte](https://github.com/ant8e)
 
 [![Production Ready](https://img.shields.io/badge/Project%20Stage-Production%20Ready-brightgreen.svg)](https://github.com/zio/zio/wiki/Project-Stages) ![CI Badge](https://github.com/zio/zio-uuid/workflows/CI/badge.svg) [![Sonatype Snapshots](https://img.shields.io/nexus/s/https/oss.sonatype.org/dev.zio/zio-uuid_2.13.svg?label=Sonatype%20Snapshot)](https://oss.sonatype.org/content/repositories/snapshots/dev/zio/zio-uuid_2.13/) [![zio-uuid](https://img.shields.io/github/stars/zio/zio-uuid?style=social)](https://github.com/zio/zio-uuid)
@@ -24,7 +24,7 @@ Implementation based on this [UUID RFC Draft](https://datatracker.ietf.org/doc/h
 In addition to UUID, there is also support for [TypeIDs](https://github.com/jetpack-io/typeid). TypeIDs are a modern,
 type-safe extension of UUIDv7
 
-_ZIO implementation note:_ Contrary to `uuid4cats-effect`, that we don't provide a UUIDv4 implementation in this lib. ZIO is already providing one
+_ZIO implementation note:_ Note, that we don't provide a UUIDv4 implementation in this lib. ZIO is already providing one
 with `ZIO.randomWith(_.nextUUID)`
 
 ## Installation
