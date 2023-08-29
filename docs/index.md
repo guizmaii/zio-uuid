@@ -58,4 +58,30 @@ val ids =
 Uniqueness of generated time-based UUIDs is guaranteed when using the same generator.
 Collisions across generators are theoretically possible although unlikely.
 
+## ⚠️ Warnings ⚠️
 
+The generators are stateful! They are using a `Ref` internally to keep track of their internal state.
+
+The `UUIDGenerator` and `TypeIDGenerator` companion object are providing accessor functions to ease their usage but, because the generators are stateful,
+the way the generator instance is provided to these functions calls can lead to generated UUIDs/TypeIDs being invalid regarding the RFC.
+
+Do not do this:
+```scala
+val id0 = UUIDGenerator.uuidV7.provideLayer(UUIDGenerator.live)
+val id1 = UUIDGenerator.uuidV7.provideLayer(UUIDGenerator.live)
+```
+This will lead to non-monotonically increasing UUIDs/TypeIDs, which is invalid regarding the RFCs.
+
+Do this instead:
+```scala
+(
+  for {
+    id0 <- UUIDGenerator.uuidV7
+    id1 <- UUIDGenerator.uuidV7
+    // ...
+  } yield ()
+).provideLayer(UUIDGenerator.live)
+```
+
+The best way to inject a `UUIDGenerator` or a `TypeIDGenerator` instance is to inject its 'live' layer in the boot sequence of your program 
+so that the same instance is reused everywhere in your program and you don't risk any issue.

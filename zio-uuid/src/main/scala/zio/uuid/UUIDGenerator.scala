@@ -37,9 +37,86 @@ object UUIDGenerator {
 
   /**
    * Accessor functions
+   *
+   * ⚠️⚠️⚠️
+   * Should not be used this way:
+   * {{{
+   *   val id0 = UUIDGenerator.uuidV1.provideLayer(UUIDGenerator.live)
+   *   val id1 = UUIDGenerator.uuidV1.provideLayer(UUIDGenerator.live)
+   * }}}
+   *
+   * Instead, use the following:
+   * {{{
+   *   (
+   *     for {
+   *       id0 <- UUIDGenerator.uuidV1
+   *       id1 <- UUIDGenerator.uuidV1
+   *     } yield ...
+   *   ).provideLayer(UUIDGenerator.live)
+   * }}}
+   *
+   * The best way to use the `UUIDGenerator` is to inject its 'live' layer in the boot sequence of your program so that the same instance
+   * is reused everywhere in your program.
+   *
+   * If incorrectly used, the generated UUIDs are not guaranteed to be generated in a monotonic order.
+   * ⚠️⚠️⚠️
    */
   val uuidV1: URIO[UUIDGenerator, UUIDv1] = ZIO.serviceWithZIO(_.uuidV1)
+
+  /**
+   * Accessor functions
+   *
+   * ⚠️⚠️⚠️
+   * Should not be used this way:
+   * {{{
+   *   val id0 = UUIDGenerator.uuidV6.provideLayer(UUIDGenerator.live)
+   *   val id1 = UUIDGenerator.uuidV6.provideLayer(UUIDGenerator.live)
+   * }}}
+   *
+   * Instead, use the following:
+   * {{{
+   *   (
+   *     for {
+   *       id0 <- UUIDGenerator.uuidV6
+   *       id1 <- UUIDGenerator.uuidV6
+   *     } yield ...
+   *   ).provideLayer(UUIDGenerator.live)
+   * }}}
+   *
+   * The best way to use the `UUIDGenerator` is to inject its 'live' layer in the boot sequence of your program so that the same instance
+   * is reused everywhere in your program.
+   *
+   * If incorrectly used, the generated UUIDs are not guaranteed to be generated in a monotonic order.
+   * ⚠️⚠️⚠️
+   */
   val uuidV6: URIO[UUIDGenerator, UUIDv6] = ZIO.serviceWithZIO(_.uuidV6)
+
+  /**
+   * Accessor functions
+   *
+   * ⚠️⚠️⚠️
+   * Should not be used this way:
+   * {{{
+   *   val id0 = UUIDGenerator.uuidV7.provideLayer(UUIDGenerator.live)
+   *   val id1 = UUIDGenerator.uuidV7.provideLayer(UUIDGenerator.live)
+   * }}}
+   *
+   * Instead, use the following:
+   * {{{
+   *   (
+   *     for {
+   *       id0 <- UUIDGenerator.uuidV7
+   *       id1 <- UUIDGenerator.uuidV7
+   *     } yield ...
+   *   ).provideLayer(UUIDGenerator.live)
+   * }}}
+   *
+   * The best way to use the `UUIDGenerator` is to inject its 'live' layer in the boot sequence of your program so that the same instance
+   * is reused everywhere in your program.
+   *
+   * If incorrectly used, the generated UUIDs are not guaranteed to be generated in a monotonic order.
+   * ⚠️⚠️⚠️
+   */
   val uuidV7: URIO[UUIDGenerator, UUIDv7] = ZIO.serviceWithZIO(_.uuidV7)
 
   /**
