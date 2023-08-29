@@ -11,7 +11,7 @@ of [uuid4cats-effect](https://github.com/ant8e/uuid4cats-effect) by [Antoine Com
 
 ## Introduction
 
-This library add support for the following types:
+This library adds support for the following types:
 
 |         |         time-based         | sortable | random |
 |--------:|:--------------------------:|:--------:|:------:|
