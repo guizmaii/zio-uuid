@@ -51,10 +51,9 @@ val ids =
   ).provideLayers(UUIDGenerator.live, TypeIDGenerator.live)
 ```
 
-Uniqueness of generated time-based UUIDs is guaranteed when using the same generator.
-Collisions across generators are theoretically possible although unlikely.
-
 ## ⚠️ Warnings ⚠️
+
+Uniqueness of generated time-based UUIDs is guaranteed when using the same generator.
 
 The generators are stateful! They are using a `Ref` internally to keep track of their internal state.
 
