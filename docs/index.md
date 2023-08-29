@@ -40,19 +40,17 @@ libraryDependencies += "dev.zio" %% "zio-uuid-json" % "@VERSION@" // Optional. P
 ## Example
 
 ```scala
-import cats.effect.IO
-import cats.effect.unsafe.implicits.global
 import zio.uuid.UUIDv6
 import zio.uuid.TypeID
 
 val ids =
   (
     for {
-      uuid1 <- UUIDGenerator.uuid
-      uuid2 <- UUIDGenerator.uuid
+      uuid1 <- UUIDGenerator.uuidV7
+      uuid2 <- UUIDGenerator.uuidV7
       typeid <- TypeIDGenerator.generate("myprefix")
     } yield (uuid1, uuid2, typeid.value)
-  ).provideLayers(UUIDGenerator.uuidV7, TypeIDGenerator.live)
+  ).provideLayers(UUIDGenerator.live, TypeIDGenerator.live)
 ```
 
 Uniqueness of generated time-based UUIDs is guaranteed when using the same generator.
