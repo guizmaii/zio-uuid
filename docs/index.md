@@ -34,7 +34,6 @@ In order to use this library, we need to add the following line in our `build.sb
 
 ```scala
 libraryDependencies += "dev.zio" %% "zio-uuid" % "@VERSION@"
-libraryDependencies += "dev.zio" %% "zio-uuid-json" % "@VERSION@" // Optional. Provides JSON codecs for UUIDs and TypeIDs
 ```
 
 ## Example
