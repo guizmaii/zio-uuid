@@ -39,8 +39,7 @@ libraryDependencies += "dev.zio" %% "zio-uuid" % "@VERSION@"
 ## Example
 
 ```scala
-import zio.uuid.UUIDv6
-import zio.uuid.TypeID
+import zio.uuid.*
 
 val ids =
   (
