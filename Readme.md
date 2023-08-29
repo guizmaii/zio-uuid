@@ -11,7 +11,7 @@ of [uuid4cats-effect](https://github.com/ant8e/uuid4cats-effect) by [Antoine Com
 
 ## Introduction
 
-This library add support for the following types:
+This library adds support for the following types:
 
 |         |         time-based         | sortable | random |
 |--------:|:--------------------------:|:--------:|:------:|
@@ -34,31 +34,26 @@ In order to use this library, we need to add the following line in our `build.sb
 
 ```scala
 libraryDependencies += "dev.zio" %% "zio-uuid" % "<version>"
-libraryDependencies += "dev.zio" %% "zio-uuid-json" % "<version>" // Optional. Provides JSON codecs for UUIDs and TypeIDs
 ```
 
 ## Example
 
 ```scala
-import cats.effect.IO
-import cats.effect.unsafe.implicits.global
-import zio.uuid.UUIDv6
-import zio.uuid.TypeID
+import zio.uuid.*
 
 val ids =
   (
     for {
-      uuid1 <- UUIDGenerator.uuid
-      uuid2 <- UUIDGenerator.uuid
+      uuid1 <- UUIDGenerator.uuidV7
+      uuid2 <- UUIDGenerator.uuidV7
       typeid <- TypeIDGenerator.generate("myprefix")
     } yield (uuid1, uuid2, typeid.value)
-  ).provideLayers(UUIDGenerator.uuidV7, TypeIDGenerator.live)
+  ).provideLayers(UUIDGenerator.live, TypeIDGenerator.live)
 ```
 
-Uniqueness of generated time-based UUIDs is guaranteed when using the same generator.
-Collisions across generators are theoretically possible although unlikely.
-
 ## ⚠️ Warnings ⚠️
+
+Uniqueness of generated time-based UUIDs is guaranteed when using the same generator.
 
 The generators are stateful! They are using a `Ref` internally to keep track of their internal state.
 
@@ -83,7 +78,7 @@ Do this instead:
 ).provideLayer(UUIDGenerator.live)
 ```
 
-The best way to inject a `UUIDGenerator` or a `TypeIDGenerator` instance is to inject its 'live' layer in the boot sequence of your program 
+The best way to inject a `UUIDGenerator` or a `TypeIDGenerator` instance is to inject its `live` layer in the boot sequence of your program 
 so that the same instance is reused everywhere in your program and you don't risk any issue.
 
 ## Documentation
