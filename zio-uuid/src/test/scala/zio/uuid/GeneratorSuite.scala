@@ -17,7 +17,7 @@
 package zio.uuid
 
 import munit.ZSuite
-import zio.{UIO, ZIO}
+import zio.{URIO, ZIO}
 
 import java.util.UUID
 
@@ -26,32 +26,32 @@ class GeneratorSuite extends ZSuite {
   private val n = 10000
 
   testZ("UUIDv1 should generate UUIDs") {
-    val gen = UUIDGenerator.uuidV1.provideLayer(UUIDGenerator.live)
-
-    for {
-      uuids <- genN(gen, n)
-      _     <- assertAllUnique(uuids)
-    } yield ()
+    (
+      for {
+        uuids <- genN(UUIDGenerator.uuidV1, n)
+        _     <- assertAllUnique(uuids)
+      } yield ()
+    ).provideLayer(UUIDGenerator.live)
   }
 
   testZ("UUIDv6 should generate UUIDs") {
-    val gen = UUIDGenerator.uuidV6.provideLayer(UUIDGenerator.live)
-
-    for {
-      uuids <- genN(gen, n)
-      _     <- assertAllUnique(uuids)
-      _     <- assertSorted(uuids)
-    } yield ()
+    (
+      for {
+        uuids <- genN(UUIDGenerator.uuidV6, n)
+        _     <- assertAllUnique(uuids)
+        _     <- assertSorted(uuids)
+      } yield ()
+    ).provideLayer(UUIDGenerator.live)
   }
 
   testZ("UUIDv7 should generate UUIDs") {
-    val gen = UUIDGenerator.uuidV7.provideLayer(UUIDGenerator.live)
-
-    for {
-      uuids <- genN(gen, n)
-      _     <- assertAllUnique(uuids)
-      _     <- assertSorted(uuids)
-    } yield ()
+    (
+      for {
+        uuids <- genN(UUIDGenerator.uuidV7, n)
+        _     <- assertAllUnique(uuids)
+        _     <- assertSorted(uuids)
+      } yield ()
+    ).provideLayer(UUIDGenerator.live)
   }
 
   testZ("TypeID should generate TypeIds") {
@@ -69,7 +69,7 @@ class GeneratorSuite extends ZSuite {
       .interceptFailure[IllegalArgumentException]
   }
 
-  private def genN[UUIDvX](gen: UIO[UUIDvX], n: Int): UIO[List[UUIDvX]] =
+  private def genN[R, UUIDvX](gen: URIO[R, UUIDvX], n: Int): URIO[R, List[UUIDvX]] =
     ZIO.collectAll(List.tabulate(n)(_ => gen))
 
   implicit class UUIDsOps(uuids: List[UUID]) {
