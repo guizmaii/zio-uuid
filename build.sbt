@@ -1,4 +1,3 @@
-
 enablePlugins(
   ZioSbtEcosystemPlugin,
   ZioSbtCiPlugin,
