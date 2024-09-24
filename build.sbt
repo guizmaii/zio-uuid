@@ -8,7 +8,7 @@ inThisBuild(
     name                     := "zio-uuid",
     organization             := "com.guizmaii",
     homepage                 := Some(url("https://github.com/guizmaii-opensource/zio-uuid")),
-    zioVersion               := "2.1.7",
+    zioVersion               := "2.1.9",
     scala213                 := "2.13.14",
     scala3                   := "3.3.3",
     crossScalaVersions -= scala212.value,
@@ -62,10 +62,10 @@ lazy val `zio-uuid` =
     .settings(
       libraryDependencies ++= Seq(
         "dev.zio"           %%% "zio"         % zioVersion.value,
-        "dev.zio"            %% "zio-prelude" % "1.0.0-RC29",
-        "dev.zio"           %%% "zio-json"    % "0.7.2"          % Optional,
+        "dev.zio"            %% "zio-prelude" % "1.0.0-RC31",
+        "dev.zio"           %%% "zio-json"    % "0.7.3"          % Optional,
         "dev.zio"           %%% "zio-test"    % zioVersion.value % Test,
-        "org.scalameta"     %%% "munit"       % "1.0.1"          % Test,
+        "org.scalameta"     %%% "munit"       % "1.0.2"          % Test,
         "com.github.poslegm" %% "munit-zio"   % "0.3.0"          % Test,
       )
     )
